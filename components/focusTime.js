@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 
@@ -14,13 +14,26 @@ export default function FocusTime({ focusTask, onBack }) {
     return `${minute}:${second < 10 ? "0" : ""}${second}`;
   };
 
-  useEffect(() => {});
+  useEffect(() => {
+    let intervalId;
+
+    intervalId = setInterval(() => {
+      setSelectedTime((prev) => prev - 1);
+    }, 1000);
+
+    if (!isRunning || selectedTime <= 0) {
+      clearInterval(intervalId);
+    } else if (selectedTime == 0) {
+      Alert.alert(`you have succesfully focused on ${focusTask}`);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isRunning, selectedTime]);
 
   return (
     <SafeAreaView styles={styles.container}>
       <Text style={styles.timerText}>
-        {timeFormat(times[0])}
-        {selectedTime}
+        {selectedTime ? timeFormat(selectedTime) : "00:00"}
       </Text>
 
       <Text style={styles.subTitle}>Focusing on:</Text>
@@ -48,7 +61,12 @@ export default function FocusTime({ focusTask, onBack }) {
         ))}
       </View>
 
-      <TouchableOpacity style={styles.startFab}>
+      <TouchableOpacity
+        style={styles.startFab}
+        onPress={() => {
+          setIsRunning(!isRunning);
+        }}
+      >
         <Text style={{ color: "white" }}>{isRunning ? "Paused" : "Start"}</Text>
       </TouchableOpacity>
 
