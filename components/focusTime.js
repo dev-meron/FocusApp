@@ -18,27 +18,42 @@ export default function FocusTime({ focusTask, onBack }) {
 
   return (
     <SafeAreaView styles={styles.container}>
-      <Text style={styles.timerText}>{timeFormat(times[0])}</Text>
+      <Text style={styles.timerText}>
+        {timeFormat(times[0])}
+        {selectedTime}
+      </Text>
+
       <Text style={styles.subTitle}>Focusing on:</Text>
       <Text style={styles.focusTask}>{focusTask}</Text>
 
-      <View style={{height:10, width:100%, backgroundColor:'#241b9a, marginTop:30, marginBottom:20,'}}/>
-
+      <View
+        style={{
+          height: 10,
+          width: "100%",
+          backgroundColor: "#241b9a",
+          marginTop: 30,
+          marginBottom: 20,
+        }}
+      />
 
       <View style={styles.timeoption}>
-        {times.map((time, index)=>(
-          <TouchableOpacity key={index} style={styles.timeoptionsButton} onPress={() =>{}}>
+        {times.map((time, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.timeoptionsButton}
+            onPress={() => setSelectedTime(times)}
+          >
             <Text style={styles.timeoptionText}>{timeFormat(time)}</Text>
           </TouchableOpacity>
-         ))}
+        ))}
       </View>
 
       <TouchableOpacity style={styles.startFab}>
-        <Text style={{color:'white'}}>{isRunning? 'Paused' :'Start'}</Text>
+        <Text style={{ color: "white" }}>{isRunning ? "Paused" : "Start"}</Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.backBotton} onPress={onBack}>
-        <Text style={{color:'white'}}>Back</Text>
+        <Text style={{ color: "white" }}>Back</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -63,53 +78,50 @@ const styles = StyleSheet.create({
   },
   focusTask: {
     fontSize: 30,
-    color: 'white',
-    marginTop:20,
-    fontWeight: 'bold',
-
+    color: "white",
+    marginTop: 20,
+    fontWeight: "bold",
   },
-  timeoption :{
-    flexDirection: 'row',
-    marginTop:30,
-    alignItems:'space-between',
-    width : '100%',
-    justifyContent :'space-around',
+  timeoption: {
+    flexDirection: "row",
+    marginTop: 30,
+    alignItems: "space-between",
+    width: "100%",
+    justifyContent: "space-around",
   },
-  timeoptionsButton :{
+  timeoptionsButton: {
     height: 100,
     width: 100,
-    borderRadius:50,
-    justifyContent:'center',
-    alignContent: 'center',
-    backgroundColor: 'transparent',
+    borderRadius: 50,
+    justifyContent: "center",
+    alignContent: "center",
+    backgroundColor: "transparent",
     borderWidth: 2,
-    borderColor: 'white',
-
+    borderColor: "white",
   },
   timeoptionText: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
-    
   },
-  startFab:{
-    height:80,
-    width:80, 
-    borderRadius:40,
-    backgroundColor:'transparent',
+  startFab: {
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    backgroundColor: "transparent",
     borderWidth: 2,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: 50,
   },
-  backBotton :{
+  backBotton: {
     marginTop: 50,
-    height:50,
-    width:100,
-    borderRadius:25,
-    backgroundColor: 'transparent',
-    borderWidth:2,
-    borderColor: 'white',
-    justifyContent:'center',
-    alignItems: 'center'
-  }
+    height: 50,
+    width: 100,
+    borderRadius: 25,
+    backgroundColor: "transparent",
+    borderWidth: 2,
+    borderColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
