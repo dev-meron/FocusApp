@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Alert } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 import Toast from "react-native-toast-message";
+import { systemBars } from "react-native-edge-to-edge";
 
 export default function FocusTime({ focusTask, onBack }) {
   const times = [600, 900, 1200];
@@ -15,29 +16,29 @@ export default function FocusTime({ focusTask, onBack }) {
     return `${minute}:${second < 10 ? "0" : ""}${second}`;
   };
 
-  const showToast =() => {
+  const showToast = () => {
     Toast.show({
-      position: 'bottom',
-      type: 'success',
+      position: "bottom",
+      type: "success",
       text1: `you have succesfully focused on ${focusTask}`,
-    })
-  }
+    });
+  };
 
   useEffect(() => {
-    let intervalId;
+    if (!isRunning || selectedTime <= 0) {
+      return;
+    }
 
-    intervalId = setInterval(() => {
+    const intervalId = setInterval(() => {
       setSelectedTime((prev) => prev - 1);
     }, 1000);
 
-    if (!isRunning || selectedTime < 0) {
-      clearInterval(intervalId);
-    
     return () => clearInterval(intervalId);
   }, [isRunning, selectedTime]);
 
   return (
     <SafeAreaView styles={styles.container}>
+      <systemBars style="light" />
       <Text style={styles.timerText}>
         {selectedTime ? timeFormat(selectedTime) : "00:00"}
       </Text>
