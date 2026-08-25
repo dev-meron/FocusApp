@@ -1,8 +1,17 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ImageBackground,
+  pressable,
+} from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-paper";
 import FocusTime from "./components/focusTime";
+import { ScrollView } from "react-native/types_generated/index";
+import { ImageBackground } from "react-native/types_generated/index";
 
 export default function App() {
   const [switchScreen, setSwitchScreen] = useState(false);
@@ -64,12 +73,31 @@ export default function App() {
       </View>
 
       <View style={styles.focusedTasks}>
-        <Text style={styles.focudTitle}>Things we have focused on:</Text>
-        {task.map((task, index) => (
-          <text key={index} style={styles.taskText}>
-            {task}
-          </text>
-        ))}
+        <Text style={styles.focusTitle}>Things we have focused on:</Text>
+
+        <ImageBackground
+          style={styles.taskBackground}
+          source={require("./assets/image/backgroundapp.png")}
+        >
+          <ScrollView
+            style={{ padding: 20 }}
+            contentContainerStyle={{ gap: 10 }}
+          >
+            {tasks.map((text, index) => (
+              <pressable
+                key={index}
+                onPress={() => {
+                  changeScreen();
+                  setSelectedTask(text);
+                }}
+              >
+                <Text key={index} style={styles.taskText}>
+                  -{text}
+                </Text>
+              </pressable>
+            ))}
+          </ScrollView>
+        </ImageBackground>
       </View>
     </SafeAreaView>
   );
@@ -100,6 +128,11 @@ const styles = StyleSheet.create({
     borderColor: "#fff",
     marginLeft: 10,
   },
+  focusedTasks: {
+    marginTop: 20,
+    padding: 10,
+    flex: 1,
+  },
   fabText: {
     fontSize: 20,
     color: "#fff",
@@ -109,5 +142,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: "white",
     padding: 10,
+  },
+  taskBackground: {
+    flex: 1,
+    resizeMode: "cover",
+    overflow: "hidden",
+    borderRadius: 20,
+    marginTop: 10,
   },
 });
