@@ -4,14 +4,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   ImageBackground,
-  pressable,
+  Pressable,
+  ScrollView,
 } from "react-native";
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-paper";
 import FocusTime from "./components/focusTime";
-import { ScrollView } from "react-native/types_generated/index";
-import { ImageBackground } from "react-native/types_generated/index";
 
 export default function App() {
   const [switchScreen, setSwitchScreen] = useState(false);
@@ -28,26 +27,13 @@ export default function App() {
 
     if (trimmed.length > 0) {
       setTasks((prev) => [...prev, trimmed]);
-      setTasks("");
+      setTask("");
       setSelectedTask(trimmed);
     }
   };
 
   if (switchScreen) {
     return <FocusTime focusTask={selectedTask} onBack={changeScreen} />;
-  }
-
-  const handleBack = () => {
-    setAddTask((prev) => !prev);
-  };
-
-  const handleTextChange = () => {
-    setTask(task);
-    setTask("");
-  };
-
-  if (addTask) {
-    return <FocusTime />;
   }
 
   return (
@@ -59,7 +45,7 @@ export default function App() {
           label="Focus"
           style={styles.inputtext}
           value={task}
-          onChange={(text) => setTask(text)}
+          onChangeText={(text) => setTask(text)}
         />
         <TouchableOpacity
           style={styles.fabButton}
@@ -84,7 +70,7 @@ export default function App() {
             contentContainerStyle={{ gap: 10 }}
           >
             {tasks.map((text, index) => (
-              <pressable
+              <Pressable
                 key={index}
                 onPress={() => {
                   changeScreen();
@@ -94,7 +80,7 @@ export default function App() {
                 <Text key={index} style={styles.taskText}>
                   -{text}
                 </Text>
-              </pressable>
+              </Pressable>
             ))}
           </ScrollView>
         </ImageBackground>
@@ -110,7 +96,7 @@ const styles = StyleSheet.create({
   },
 
   inputcontainer: {
-    flexdirection: "row",
+    flexDirection: "row",
     padding: 20,
     backgroundColor: "#fff",
   },
@@ -138,7 +124,7 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   taskText: {
-    fontWeight: "semibold",
+    fontWeight: "600",
     fontSize: 18,
     color: "white",
     padding: 10,

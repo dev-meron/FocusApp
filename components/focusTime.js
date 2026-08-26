@@ -10,7 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState, useEffect } from "react";
 import Toast from "react-native-toast-message";
-import { systemBars } from "react-native-edge-to-edge";
+import { SystemBars } from "react-native-edge-to-edge";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 export default function FocusTime({ focusTask, onBack }) {
@@ -46,7 +46,7 @@ export default function FocusTime({ focusTask, onBack }) {
   }, [isRunning, selectedTime]);
 
   return (
-    <SafeAreaView styles={styles.container}>
+    <SafeAreaView style={styles.container}>
       <ImageBackground
         style={styles.imageBackground}
         resizeMode="cover"
@@ -57,7 +57,7 @@ export default function FocusTime({ focusTask, onBack }) {
           <Text style={{ color: "white" }}>Back</Text>
         </TouchableOpacity>
 
-        <systemBars style="light" />
+        <SystemBars style="light" />
         <Text style={styles.timerText}>
           {selectedTime ? timeFormat(selectedTime) : "00:00"}
         </Text>
@@ -80,7 +80,7 @@ export default function FocusTime({ focusTask, onBack }) {
             <TouchableOpacity
               key={index}
               style={styles.timeoptionsButton}
-              onPress={() => setSelectedTime(times)}
+              onPress={() => setSelectedTime(time)}
             >
               <Text style={styles.timeoptionText}>{timeFormat(time)}</Text>
             </TouchableOpacity>
