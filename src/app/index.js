@@ -10,9 +10,9 @@ import {
 import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-paper";
-import FocusTime from "./components/focusTime";
+import { router } from "expo-router";
 
-export default function App() {
+export default function Home() {
   const [switchScreen, setSwitchScreen] = useState(false);
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
@@ -29,12 +29,9 @@ export default function App() {
       setTasks((prev) => [...prev, trimmed]);
       setTask("");
       setSelectedTask(trimmed);
+      router.push({ pathname: "/focusTime", params: { focusedTask: trimmed } });
     }
   };
-
-  if (switchScreen) {
-    return <FocusTime focusTask={selectedTask} onBack={changeScreen} />;
-  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -63,7 +60,7 @@ export default function App() {
 
         <ImageBackground
           style={styles.taskBackground}
-          source={require("./assets/image/backgroundapp.png")}
+          source={require("../../assets/image/backgroundapp.png")}
         >
           <ScrollView
             style={{ padding: 20 }}
@@ -73,8 +70,11 @@ export default function App() {
               <Pressable
                 key={index}
                 onPress={() => {
-                  changeScreen();
                   setSelectedTask(text);
+                  router.push({
+                    pathname: "/focusTime",
+                    params: { focusTask: text },
+                  });
                 }}
               >
                 <Text key={index} style={styles.taskText}>

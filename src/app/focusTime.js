@@ -12,11 +12,13 @@ import { useState, useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { SystemBars } from "react-native-edge-to-edge";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { router, useLocalSearchParams } from "expo-router";
 
-export default function FocusTime({ focusTask, onBack }) {
-  const times = [600, 900, 1200];
+export default function FocusTime() {
+  const times = [5, 900, 1200];
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
+  const params = useLocalSearchParams();
 
   const timeFormat = (times) => {
     const minute = Math.floor(times / 60);
@@ -29,12 +31,16 @@ export default function FocusTime({ focusTask, onBack }) {
     Toast.show({
       position: "bottom",
       type: "success",
-      text1: `you have succesfully focused on ${focusTask}`,
+      text1: `you have succesfully focused on ${params.focusTask}`,
     });
   };
 
   useEffect(() => {
-    if (!isRunning || selectedTime <= 0) {
+    if (!isRunning || selectedTime === null) return;
+
+    if (selectedTime <= 0) {
+      setIsRunning(false);
+      showToast();
       return;
     }
 
@@ -50,9 +56,12 @@ export default function FocusTime({ focusTask, onBack }) {
       <ImageBackground
         style={styles.imageBackground}
         resizeMode="cover"
-        source={require("../assets/image/backgroundfocus.png")}
+        source={require("../../assets/image/backgroundfocus.png")}
       >
-        <TouchableOpacity style={styles.backBotton} onPress={onBack}>
+        <TouchableOpacity
+          style={styles.backBotton}
+          onPress={() => router.back()}
+        >
           <Ionicons name="chevron-back" size={24} color="white" />
           <Text style={{ color: "white" }}>Back</Text>
         </TouchableOpacity>
@@ -63,7 +72,7 @@ export default function FocusTime({ focusTask, onBack }) {
         </Text>
 
         <Text style={styles.subTitle}>Focusing on:</Text>
-        <Text style={styles.focusTask}>{focusTask}</Text>
+        <Text style={styles.focusTask}>{params.focusTask}</Text>
 
         <View
           style={{
