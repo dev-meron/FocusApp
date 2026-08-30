@@ -3,7 +3,6 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Alert,
   ImageBackground,
   ScrollView,
 } from "react-native";
@@ -52,71 +51,78 @@ export default function FocusTime() {
   }, [isRunning, selectedTime]);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ImageBackground
-        style={styles.imageBackground}
-        resizeMode="cover"
-        source={require("../../assets/image/backgroundfocus.png")}
-      >
-        <TouchableOpacity
-          style={styles.backBotton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="chevron-back" size={24} color="white" />
-          <Text style={{ color: "white" }}>Back</Text>
-        </TouchableOpacity>
-
-        <SystemBars style="light" />
-        <Text style={styles.timerText}>
-          {selectedTime ? timeFormat(selectedTime) : "00:00"}
-        </Text>
-
-        <Text style={styles.subTitle}>Focusing on:</Text>
-        <Text style={styles.focusTask}>{params.focusTask}</Text>
-
-        <View
-          style={{
-            height: 10,
-            width: "100%",
-            backgroundColor: "#241b9a",
-            marginTop: 30,
-            marginBottom: 20,
-          }}
-        />
-
-        <View style={styles.timeoption}>
-          {times.map((time, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.timeoptionsButton}
-              onPress={() => setSelectedTime(time)}
-            >
-              <Text style={styles.timeoptionText}>{timeFormat(time)}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        <TouchableOpacity
-          style={styles.startFab}
-          onPress={() => {
-            setIsRunning(!isRunning);
+    <ImageBackground
+      style={styles.imageBackground}
+      resizeMode="cover"
+      source={require("../../../assets/image/backgroundfocus.png")}
+    >
+      <SafeAreaView style={styles.container} edges={["top"]}>
+        <ScrollView
+          contentContainerStyle={{
+            flex: 1,
+            alignItem: "center",
+            justifyContent: "center",
           }}
         >
-          <Text style={{ color: "white" }}>
-            {isRunning ? "Paused" : "Start"}
+          <TouchableOpacity
+            style={styles.backBotton}
+            onPress={() => router.back()}
+          >
+            <Ionicons name="chevron-back" size={24} color="white" />
+            <Text style={{ color: "white" }}>Back</Text>
+          </TouchableOpacity>
+
+          <SystemBars style="light" />
+          <Text style={styles.timerText}>
+            {selectedTime ? timeFormat(selectedTime) : "00:00"}
           </Text>
-        </TouchableOpacity>
 
+          <Text style={styles.subTitle}>Focusing on:</Text>
+          <Text style={styles.focusTask}>{params.focusTask}</Text>
+
+          <View
+            style={{
+              height: 10,
+              width: "100%",
+              backgroundColor: "#241b9a",
+              marginTop: 30,
+              marginBottom: 20,
+            }}
+          />
+
+          <View style={styles.timeoption}>
+            {times.map((time, index) => (
+              <TouchableOpacity
+                key={index}
+                style={styles.timeoptionsButton}
+                onPress={() => setSelectedTime(time)}
+              >
+                <Text style={styles.timeoptionText}>{timeFormat(time)}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <TouchableOpacity
+            style={styles.startFab}
+            onPress={() => {
+              setIsRunning(!isRunning);
+            }}
+          >
+            <Text style={{ color: "white" }}>
+              {isRunning ? "Paused" : "Start"}
+            </Text>
+          </TouchableOpacity>
+        </ScrollView>
         <Toast />
-      </ImageBackground>
-    </SafeAreaView>
+      </SafeAreaView>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#252250",
+    backgroundColor: "transparent",
     alignItems: "center",
   },
   imageBackground: {

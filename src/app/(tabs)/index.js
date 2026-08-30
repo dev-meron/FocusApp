@@ -13,14 +13,9 @@ import { TextInput } from "react-native-paper";
 import { router } from "expo-router";
 
 export default function Home() {
-  const [switchScreen, setSwitchScreen] = useState(false);
   const [task, setTask] = useState("");
   const [tasks, setTasks] = useState([]);
   const [selectedTask, setSelectedTask] = useState("");
-
-  const changeScreen = () => {
-    setSwitchScreen(!switchScreen);
-  };
 
   const addTask = () => {
     const trimmed = task.trim();
@@ -29,7 +24,7 @@ export default function Home() {
       setTasks((prev) => [...prev, trimmed]);
       setTask("");
       setSelectedTask(trimmed);
-      router.push({ pathname: "/focusTime", params: { focusedTask: trimmed } });
+      router.push({ pathname: "/focusTime", params: { focusTask: trimmed } });
     }
   };
 
@@ -44,13 +39,7 @@ export default function Home() {
           value={task}
           onChangeText={(text) => setTask(text)}
         />
-        <TouchableOpacity
-          style={styles.fabButton}
-          onPress={() => {
-            addTask();
-            changeScreen();
-          }}
-        >
+        <TouchableOpacity style={styles.fabButton} onPress={addTask}>
           <Text style={styles.fabText}>+</Text>
         </TouchableOpacity>
       </View>
@@ -60,7 +49,7 @@ export default function Home() {
 
         <ImageBackground
           style={styles.taskBackground}
-          source={require("../../assets/image/backgroundapp.png")}
+          source={require("../../../assets/image/backgroundapp.png")}
         >
           <ScrollView
             style={{ padding: 20 }}
@@ -92,16 +81,17 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#090437",
+    backgroundColor: "#10047f",
   },
 
   inputcontainer: {
     flexDirection: "row",
     padding: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "transparent",
   },
   inputtext: {
     flex: 1,
+    backgroundColor: "white",
   },
   fabButton: {
     height: 60,
@@ -120,8 +110,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   fabText: {
-    fontSize: 20,
-    color: "#fff",
+    fontSize: 30,
+    color: "#0d0c0c",
   },
   taskText: {
     fontWeight: "600",
@@ -135,5 +125,9 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 20,
     marginTop: 10,
+  },
+  focusTitle: {
+    fontSize: 15,
+    color: "white",
   },
 });
