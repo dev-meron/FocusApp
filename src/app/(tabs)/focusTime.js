@@ -11,13 +11,15 @@ import { useState, useEffect } from "react";
 import Toast from "react-native-toast-message";
 import { SystemBars } from "react-native-edge-to-edge";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { router, useLocalSearchParams } from "expo-router";
+import { router } from "expo-router";
+import { useTasks } from "../../context/taskContext";
 
 export default function FocusTime() {
   const times = [5, 900, 1200];
+  const { tasks, setTasks, selectedTask } = useTasks();
   const [isRunning, setIsRunning] = useState(false);
   const [selectedTime, setSelectedTime] = useState(null);
-  const params = useLocalSearchParams();
+  const focusTask = selectedTask;
 
   const timeFormat = (times) => {
     const minute = Math.floor(times / 60);
@@ -30,7 +32,7 @@ export default function FocusTime() {
     Toast.show({
       position: "bottom",
       type: "success",
-      text1: `you have succesfully focused on ${params.focusTask}`,
+      text1: `you have succesfully focused on ${focusTask}`,
     });
   };
 
@@ -40,6 +42,7 @@ export default function FocusTime() {
     if (selectedTime <= 0) {
       setIsRunning(false);
       showToast();
+      setTasks((prev) => [...prev, selectedTask]);
       return;
     }
 
@@ -66,7 +69,10 @@ export default function FocusTime() {
         >
           <TouchableOpacity
             style={styles.backBotton}
-            onPress={() => router.back()}
+            onPress={() => {
+              router.back();
+              setSelectedTime(null);
+            }}
           >
             <Ionicons name="chevron-back" size={24} color="white" />
             <Text style={{ color: "white" }}>Back</Text>
@@ -78,7 +84,7 @@ export default function FocusTime() {
           </Text>
 
           <Text style={styles.subTitle}>Focusing on:</Text>
-          <Text style={styles.focusTask}>{params.focusTask}</Text>
+          <Text style={styles.focusTask}>{focusTask}</Text>
 
           <View
             style={{

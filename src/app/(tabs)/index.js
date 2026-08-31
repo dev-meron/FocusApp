@@ -7,21 +7,20 @@ import {
   Pressable,
   ScrollView,
 } from "react-native";
-import { useState } from "react";
+import { useState, useContext, createContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-paper";
 import { router } from "expo-router";
+import { useTasks } from "../../context/taskContext";
 
 export default function Home() {
-  const [task, setTask] = useState("");
-  const [tasks, setTasks] = useState([]);
-  const [selectedTask, setSelectedTask] = useState("");
+  const { task, setTask, tasks, setTasks, SelectedTask, setSelectedTask } =
+    useTasks();
 
   const addTask = () => {
     const trimmed = task.trim();
 
     if (trimmed.length > 0) {
-      setTasks((prev) => [...prev, trimmed]);
       setTask("");
       setSelectedTask(trimmed);
       router.push({ pathname: "/focusTime", params: { focusTask: trimmed } });
