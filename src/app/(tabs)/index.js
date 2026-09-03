@@ -12,10 +12,13 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { TextInput } from "react-native-paper";
 import { router } from "expo-router";
 import { useTasks } from "../../context/taskContext";
+import { useColor } from "../../context/colorContext";
+import { SystemBars } from "react-native-edge-to-edge";
 
 export default function Home() {
   const { task, setTask, tasks, setTasks, SelectedTask, setSelectedTask } =
     useTasks();
+  const { colors, statusBarStyle } = useColor();
 
   const addTask = () => {
     const trimmed = task.trim();
@@ -28,7 +31,11 @@ export default function Home() {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: colors.background }]}
+    >
+      <SystemBars style={statusBarStyle} />
+
       <View style={styles.inputcontainer}>
         <TextInput
           placeholder={"what would you like focus....."}
@@ -38,13 +45,18 @@ export default function Home() {
           value={task}
           onChangeText={(text) => setTask(text)}
         />
-        <TouchableOpacity style={styles.fabButton} onPress={addTask}>
+        <TouchableOpacity
+          style={[styles.fabButton, { backgroundColor: colors.textPrimary }]}
+          onPress={addTask}
+        >
           <Text style={styles.fabText}>+</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.focusedTasks}>
-        <Text style={styles.focusTitle}>Things we have focused on:</Text>
+        <Text style={[styles.focusTitle, { color: colors.textPrimary }]}>
+          Things we have focused on:
+        </Text>
 
         <ImageBackground
           style={styles.taskBackground}

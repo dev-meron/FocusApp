@@ -13,8 +13,10 @@ import { SystemBars } from "react-native-edge-to-edge";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { router } from "expo-router";
 import { useTasks } from "../../context/taskContext";
+import { useColor } from "../../context/colorContext";
 
 export default function FocusTime() {
+  const { Colors } = useColor();
   const times = [5, 900, 1200];
   const { tasks, setTasks, selectedTask } = useTasks();
   const [isRunning, setIsRunning] = useState(false);
@@ -54,74 +56,77 @@ export default function FocusTime() {
   }, [isRunning, selectedTime]);
 
   return (
-    <ImageBackground
-      style={styles.imageBackground}
-      resizeMode="cover"
-      source={require("../../../assets/image/backgroundfocus.png")}
+    <SafeAreaView
+      style={[styles.container, { backgroundColor: Colors.background }]}
+      edges={["top"]}
     >
-      <SafeAreaView style={styles.container} edges={["top"]}>
-        <ScrollView
-          contentContainerStyle={{
-            flex: 1,
-            alignItem: "center",
-            justifyContent: "center",
+      <ScrollView
+        contentContainerStyle={{
+          alignItem: "center",
+          justifyContent: "center",
+        }}
+      >
+        <TouchableOpacity
+          style={[styles.backBotton, { backgroundColor: Colors.background }]}
+          onPress={() => {
+            router.back();
+            setSelectedTime(null);
           }}
         >
-          <TouchableOpacity
-            style={styles.backBotton}
-            onPress={() => {
-              router.back();
-              setSelectedTime(null);
-            }}
-          >
-            <Ionicons name="chevron-back" size={24} color="white" />
-            <Text style={{ color: "white" }}>Back</Text>
-          </TouchableOpacity>
+          <Ionicons name="chevron-back" size={24} color={Colors.textPrimary} />
+          <Text style={{ color: Colors.textPrimary }}>Back</Text>
+        </TouchableOpacity>
 
-          <SystemBars style="light" />
-          <Text style={styles.timerText}>
-            {selectedTime ? timeFormat(selectedTime) : "00:00"}
-          </Text>
+        <SystemBars style="light" />
+        <Text style={[styles.timerText, { color: Colors.textPrimary }]}>
+          {selectedTime ? timeFormat(selectedTime) : "00:00"}
+        </Text>
 
-          <Text style={styles.subTitle}>Focusing on:</Text>
-          <Text style={styles.focusTask}>{focusTask}</Text>
+        <Text style={styles.subTitle}>Focusing on:</Text>
+        <Text style={styles.focusTask}>{focusTask}</Text>
 
-          <View
-            style={{
-              height: 10,
-              width: "100%",
-              backgroundColor: "#241b9a",
-              marginTop: 30,
-              marginBottom: 20,
-            }}
-          />
+        <View
+          style={{
+            height: 10,
+            width: "100%",
+            backgroundColor: Colors.surface,
+            marginTop: 30,
+            marginBottom: 20,
+          }}
+        />
 
-          <View style={styles.timeoption}>
-            {times.map((time, index) => (
-              <TouchableOpacity
-                key={index}
-                style={styles.timeoptionsButton}
-                onPress={() => setSelectedTime(time)}
+        <View style={[styles.timeoption, { background: Colors.background }]}>
+          {times.map((time, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.timeoptionsButton,
+                { backgroundColor: Colors.background },
+              ]}
+              onPress={() => setSelectedTime(time)}
+            >
+              <Text
+                style={[styles.timeoptionText, { color: Colors.textPrimary }]}
               >
-                <Text style={styles.timeoptionText}>{timeFormat(time)}</Text>
-              </TouchableOpacity>
-            ))}
-          </View>
+                {timeFormat(time)}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
 
-          <TouchableOpacity
-            style={styles.startFab}
-            onPress={() => {
-              setIsRunning(!isRunning);
-            }}
-          >
-            <Text style={{ color: "white" }}>
-              {isRunning ? "Paused" : "Start"}
-            </Text>
-          </TouchableOpacity>
-        </ScrollView>
-        <Toast />
-      </SafeAreaView>
-    </ImageBackground>
+        <TouchableOpacity
+          style={styles.startFab}
+          onPress={() => {
+            setIsRunning(!isRunning);
+          }}
+        >
+          <Text style={{ color: Colors.textPrimary }}>
+            {isRunning ? "Paused" : "Start"}
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+      <Toast />
+    </SafeAreaView>
   );
 }
 
