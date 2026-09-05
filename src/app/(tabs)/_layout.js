@@ -1,22 +1,39 @@
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import TaskProvider from "../../context/taskContext";
-import colorProvider from "../../context/colorContext";
-import { useColor } from "../../context/colorContext";
+import { useState, useEffect } from "react";
 import { SystemBars } from "react-native-edge-to-edge";
-import { setStatusBarStyle } from "expo-status-bar";
+
+import TaskProvider from "../../contexts/taskContexts";
+import ColorProvider, { useColors } from "../../contexts/colorContext";
+import { getItems } from "../../utils/storage";
+import OnBoardingScreen from "../screens/onBoardingScreen";
 
 export default function Layout() {
-  const {colors} = useColor;
+  const [showOnboarding, setShowOnboarding] = useState(null);
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      try {
+        const value = await getItems("onboardingCompleted");
+        setShowOnboarding(value === null);
+      } catch (error) {
+        console.log(`Error checking onboarding status: ${error}`);
+      }
+    };
+
+    checkOnboardingStatus();
+  }, []);
+
   const TabLayout = () => {
+    const { colors, statusBarStyle } = useColors();
+
     return (
-    <>
-    <SystemBars style={setStatusBarStyle}/>
-    <Tabs
+      <>
+        <SystemBars style={statusBarStyle} />
+        <Tabs
           screenOptions={{
             tabBarStyle: {
               backgroundColor: colors.background,
-              setOffset: 0,
               borderTopWidth: 0,
             },
             tabBarActiveTintColor: colors.Primary,
@@ -41,27 +58,29 @@ export default function Layout() {
               ),
             }}
           />
-          <Tabs.Screen 
-            name='setting',
+          <Tabs.Screen
+            name="setting"
             options={{
               headerShown: false,
-              tabBarIcon :() =>(
-                <Ionicons name= 'setting-outline' size={24} color='grey'/>
-              )
+              tabBarIcon: () => (
+                <Ionicons name="settings-outline" size={24} color="grey" />
+              ),
             }}
           />
         </Tabs>
-        </>
-    
-    )
-    
-  }
-  
-  return (
-    <colorProvider>
-      <TaskProvider>
-        <TabLayout/>
-      </TaskProvider>
-    </colorProvider>
-  );
+      </>
+    );
+  };
+
+  if (showOnboarding === true) return <OnBoardingScreen />;
+  if (showOnboarding === false)
+    return (
+      <ColorProvider>
+        <TaskProvider>
+          <TabLayout />
+        </TaskProvider>
+      </ColorProvider>
+    );
+
+  return null;
 }
